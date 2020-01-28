@@ -2,28 +2,21 @@ import nltk
 import numpy
 import random
 import string
+from chat import Chat
 
 GREETINGS_UTTERANCE = ("hello", "hi", "sup", "heyo", "hey")
 GREETINGS_RESPONSE = ("hi", "hey", "hello", "howdy", "greetings")
 ENDING_UTTERANCE = ("bye", "goodbye", "see ya", "later")
 
 def init():
-    chat = {
-        "end": False,
-        "auth": False,
-        "user": None,
-        "text": None,
-        "lastRes": None,
-        "lastUtt": None,
-        "utterance": None
-    }
+    chat = Chat()
     return chat
 
 def greeting(chat):
     for word in chat.utterance.split():
-        if word.upper() in GREETINGS_UTTERANCE:
+        if word.lower() in GREETINGS_UTTERANCE:
             chat.text = random.choice(GREETINGS_RESPONSE)
-        elif word.upper() in ENDING_UTTERANCE:
+        elif word.lower() in ENDING_UTTERANCE:
             if chat.auth == True:
                 chat.end = True
                 chat.text = "Goodbye, %s!" % chat.user
@@ -48,12 +41,14 @@ def authenticate(chat):
 def chatWithBot(chat):
     try:
         if not chat:
+            print("chatbot: No chat object, initializing")
             chat = init()
         else:
+            print("chatbot: Chat object recieved. Processing.")
             chat = greeting(chat)
             chat = authenticate(chat)
 
         return chat
-    except Error:
+    except:
         chat = init()
         chat.text = "Sorry, something went wrong. Please try again later"

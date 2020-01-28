@@ -1,31 +1,36 @@
 import flask
-import chatbot
+from chatbot import init, chatWithBot
+import sys
 
-from flask import jsonify
+from flask import jsonify, request
 
 app = flask.Flask(__name__)
 
-def createChatDict(request):
+def createChatDict(request, chat):
     chat.utterance = request.json.get("utterance")
+    print("chatAPI: utterance is %s" % chat.utterance)
     return chat
 
-@app.route('/chat')
+@app.route('/chat', methods=["POST"])
 def chat():
+
     try:
-        chat = chatbot.init()
-        chat = createChatDict(request)
-        chat = chatbot.chatWithBot(chat)
+        print("chatAPI: starting API")
+        chat = init()
+        chat = createChatDict(request, chat)
+        chat = chatWithBot(chat)
 
         res = {
             "status": 200,
-            "body": chat
+            "response": chat.text,
+            "metadata": str(chat)
         }
         return jsonify(res)
 
-    except Error as err:
+    except:
         res = {
             "status": 500,
-            "error": err
+            "error": "API Error: %s" % sys.exc_info()[0]
         }
         return jsonify(res)
 
