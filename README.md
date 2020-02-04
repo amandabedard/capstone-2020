@@ -1,7 +1,7 @@
 # capstone-2020
 Chat vulnerabilities capstone project
 
-**Python 3.7**
+**Python 3.6**
 
 **Packages**: flask, nltk, rivescript
 
