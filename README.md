@@ -3,7 +3,7 @@ Chat vulnerabilities capstone project
 
 **Python 3.7**
 
-**Packages**: flask, nltk, numpy
+**Packages**: flask, nltk, rivescript
 
 To run:
 - Make sure the dependencies listed above are installed
