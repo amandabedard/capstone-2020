@@ -5,6 +5,10 @@ import string
 from rivescript import RiveScript
 from chat import Chat
 
+bot = RiveScript()
+bot.load_directory("./rive")
+bot.sort_replies()
+
 def init():
     chat = Chat()
     return chat
@@ -28,9 +32,6 @@ def chatWithBot(chat):
             chat = init()
         else:
             print("chatbot: Chat object recieved. Processing.")
-            bot = RiveScript()
-            bot.load_directory("./capstone-2020/vuln-bot/rive")
-            bot.sort_replies()
 
             chat.text = bot.reply('usr', chat.utterance.lower())
 

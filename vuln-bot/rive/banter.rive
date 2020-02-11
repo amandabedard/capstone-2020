@@ -16,25 +16,25 @@
 + my name is *
 - Nice to meet you, <star>
 
++ what do you look like
+- I don't look like anything, but my code? Click here to check it out <a href="https://github.com/amandabedard/capstone-2020">Click here to check it out</a>
+
 + how are you
 - Good, how are you? {topic=howru}
 
 > topic howru
   + (good|ok|fine)
-  - That's good! {topic=random}
+  - That's good!{topic=random}
 
   + (great|super|fantastic)
   - That's great to hear! {topic=random}
 
   + (bad|horrible|terrible)
-  - I'm sorry to hear that. {topic=random}
+  - I'm sorry to hear that.{topic=random}
 
   + *
-  - Ok, thank you for sharing. {topic=random}
+  - Ok, thank you for sharing.{topic=random}
 < topic
-
-+ what do you look like*
-- I don't look like anything, but my code? Click here to check it out <a href="https://github.com/amandabedard/capstone-2020">Click here to check it out</a>
 
 // Catch All
 + *

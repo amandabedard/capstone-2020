@@ -1,7 +1,7 @@
 from rivescript import RiveScript
 
 rs = RiveScript()
-rs.load_directory("./capstone-2020/vuln-bot/rive")
+rs.load_directory("./rive")
 rs.sort_replies()
 
 while True:
