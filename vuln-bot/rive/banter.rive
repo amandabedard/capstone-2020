@@ -22,6 +22,15 @@
 + how are you
 - Good, how are you? {topic=howru}
 
++ authenticate
+- Ok, can I have an account number please? {topic=auth}
+
+> topic auth
+  + *
+  - Canceling authentication. {topic=random}
+  + #
+  - Please give me your birthdate (MMDDYY) and the last 4 of your social, separated by a space to authenticate {topic=random}
+
 > topic howru
   + (good|ok|fine)
   - That's good!{topic=random}

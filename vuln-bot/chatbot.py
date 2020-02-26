@@ -9,18 +9,24 @@ bot = RiveScript()
 bot.load_directory("./rive")
 bot.sort_replies()
 
-def init():
+def init(chatId):
     chat = Chat()
+    chat.checkSession(chatId)
     return chat
 
 def authenticate(chat):
-    if not chat.auth and chat.lastRes == "What is your SSN?":
-        #TODO: Replace with actual authentication against a DB maybe?
-        chat.auth = True
-        chat.user.name = 'Amanda'
-        chat.text = "Authenticated! Thank you!"
-    elif chat.auth == False and chat.lastUtt == "authenticate":
-        chat.text = "What is your SSN?"
+    if not chat.auth and chat.lastRes == "Please give me your birthdate (MMDDYY) and the last 4 of your social, separated by a space to authenticate":
+        # Call authentication function here
+        authenticated = True
+        if authenticated:
+            chat.auth = True
+            chat.accountNumber = 12345
+            chat.fullName = 'Amanda Bedard'
+            chat.text = "Authenticated! Thank you!"
+        else:
+            chat.text = "Failed to authenticate. Please try again."
+    elif chat.lastUtt == "Please give me your birthdate (MMDDYY) and the last 4 of your social, separated by a space to authenticate":
+        chat.text = "Failed to authenticate. Please try again."
     
     return chat
 
@@ -32,8 +38,8 @@ def chatWithBot(chat):
             chat = init()
         else:
             print("chatbot: Chat object recieved. Processing.")
-
-            chat.text = bot.reply('usr', chat.utterance.lower())
+            chat.lastRes = chat.text
+            chat.text = bot.reply(chat.chatId, chat.utterance.lower())
 
         return chat
     except:
