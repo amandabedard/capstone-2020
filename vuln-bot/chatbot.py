@@ -3,6 +3,7 @@ import numpy
 import random
 import string
 from rivescript import RiveScript
+from auth import checkAuth
 from chat import Chat
 
 bot = RiveScript()
@@ -14,21 +15,27 @@ def init(chatId=None):
     return chat
 
 def authenticate(chat):
-    if not chat.auth and chat.lastRes == "Please give me your birthdate (MMDDYY) and the last 4 of your social, separated by a space to authenticate":
-        # Call authentication function here
-        authenticated = True
-        if authenticated:
-            chat.auth = True
-            chat.accountNumber = 12345
-            chat.fullName = 'Amanda Bedard'
-            chat.text = "Authenticated! Thank you!"
-        else:
+    try:
+        if not chat.auth and chat.lastRes == "Please give me your birthdate (MMDDYY) and the last 4 of your social, separated by a space to authenticate":
+            # Call authentication function here
+            print('Authenticating chat %s' % chat)
+            chat = checkAuth(chat)
+            if chat.auth:
+                chat.text = "Authenticated! Thank you!"
+            else:
+                chat.text = "Failed to authenticate. Please try again."
+        elif chat.lastRes == "Please give me your birthdate (MMDDYY) and the last 4 of your social, separated by a space to authenticate":
             chat.text = "Failed to authenticate. Please try again."
-    elif chat.lastUtt == "Please give me your birthdate (MMDDYY) and the last 4 of your social, separated by a space to authenticate":
-        chat.text = "Failed to authenticate. Please try again."
-    
+        elif chat.lastRes == "Ok, can I have an account number please?":
+            chat.accountNumber = int(chat.utterance)
+            chat.text = ''
+        else:
+            print('Not Auth')
+            chat.text = ''
+    except:
+        print('Auth error, skipping authentication')
+        chat.text = 'Failed to authenticate. There was an internal error.'
     return chat
-
 
 def chatWithBot(chat):
     try:
@@ -39,8 +46,10 @@ def chatWithBot(chat):
             print("chatbot: Chat object recieved. Processing.")
             if chat.text != '':
                 chat.lastRes = chat.text
-            chat.text = bot.reply(chat.chatId, chat.utterance.lower())
-
+            authenticate(chat)
+            print(chat)
+            if chat.text == '':
+                chat.text = bot.reply(chat.chatId, chat.utterance.lower())
         return chat
     except:
         chat = init()

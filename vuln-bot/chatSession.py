@@ -1,5 +1,4 @@
 import boto3
-import json
 
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 table = dynamodb.Table('capstoneChatSession')
@@ -11,7 +10,7 @@ def checkSession(chat, chatId):
                 'chatId': chatId
             }
         )
-        if response['Item']:
+        if 'Item' in response:
             item = response['Item']
             chat.end = item['endChat']
             chat.chatId = item['chatId']
