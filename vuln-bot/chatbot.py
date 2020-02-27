@@ -9,9 +9,8 @@ bot = RiveScript()
 bot.load_directory("./rive")
 bot.sort_replies()
 
-def init(chatId):
+def init(chatId=None):
     chat = Chat()
-    chat.checkSession(chatId)
     return chat
 
 def authenticate(chat):
@@ -38,7 +37,8 @@ def chatWithBot(chat):
             chat = init()
         else:
             print("chatbot: Chat object recieved. Processing.")
-            chat.lastRes = chat.text
+            if chat.text != '':
+                chat.lastRes = chat.text
             chat.text = bot.reply(chat.chatId, chat.utterance.lower())
 
         return chat

@@ -3,18 +3,23 @@ from chatbot import init, chatWithBot
 from chatSession import checkSession, updateSession
 import sys
 import uuid
+import json
 
 from flask import jsonify, request
 
 app = flask.Flask(__name__)
 
 def createChatDict(request, chat):
-    chat.utterance = request.json.get("utterance")
     # Checking to see if there's an ongoing chat session
-    if request.json.get("chatId"):
-        chat.checkSession(request.json.get("chatId"))
+    if "chatId" in request.json:
+        checkSession(chat, request.json.get("chatId"))
     else:
-        chat.chatId = uuid.uuid4()
+        chat.chatId = str(uuid.uuid1())
+    
+    if chat.utterance != '':
+        chat.lastUtt = chat.utterance
+        chat.utterance = ''
+    chat.utterance = request.json.get("utterance")
         
     print("chatAPI: utterance is %s" % chat.utterance)
     return chat
@@ -22,12 +27,14 @@ def createChatDict(request, chat):
 @app.route('/chat', methods=["POST"])
 def chat():
 
-    try:
+    # try:
         print("chatAPI: starting API")
         chat = init()
         chat = createChatDict(request, chat)
         chat = chatWithBot(chat)
-        chat.updateSession()
+
+        print(chat)
+        updateSession(chat)
 
         res = {
             "status": 200,
@@ -36,7 +43,7 @@ def chat():
         }
         return jsonify(res)
 
-    except:
+    # except:
         res = {
             "status": 500,
             "error": "API Error: %s" % sys.exc_info()[0]
