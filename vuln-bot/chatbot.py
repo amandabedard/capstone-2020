@@ -3,7 +3,7 @@ import numpy
 import random
 import string
 from rivescript import RiveScript
-from auth import checkAuth
+from auth import checkAuth, accountBal
 from chat import Chat
 
 bot = RiveScript()
@@ -13,6 +13,20 @@ bot.sort_replies()
 def init(chatId=None):
     chat = Chat()
     return chat
+
+def accountActions(chat):
+    badAuthTxt= 'You must be authenticated to perform this action. Try authenticating with "authenticate".'
+
+    if('withdraw' in chat.utterance.lower() or 'deposit' in chat.utterance.lower()):
+        if (chat.auth == 'True' or chat.auth == True):
+            chat.text = "If this were a real bot, the authenticated user would be able to perform these actions on the account"
+        else:
+            chat.text = badAuthTxt 
+    elif('balance' in chat.utterance.lower()):
+        if (chat.auth == 'True' or chat.auth == True):
+            chat.text = 'This is the current value of your account: %s' % accountBal(chat)
+        else:
+            chat.text = badAuthTxt
 
 def authenticate(chat):
     try:
@@ -47,6 +61,7 @@ def chatWithBot(chat):
             if chat.text != '':
                 chat.lastRes = chat.text
             authenticate(chat)
+            accountActions(chat)
             print(chat)
             if chat.text == '':
                 chat.text = bot.reply(chat.chatId, chat.utterance.lower())

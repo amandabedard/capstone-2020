@@ -24,3 +24,26 @@ def checkAuth(chat):
         chat.accountNumber = 0
     
     return chat
+
+def accountBal(chat):
+    try:
+        bal = 'No data'
+        response = table.get_item(
+                Key={
+                    'accountNumber': int(chat.accountNumber)
+                }
+            )
+        print(response)
+        if 'Item' in response:
+            item = response['Item']
+            check = chat.utterance.split()
+            print(check)
+            if item['accountBalance']:
+                bal = item['accountBalance']
+
+    except:
+        bal = 'Bad data'
+    
+    return bal
+        
+            
