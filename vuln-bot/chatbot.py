@@ -43,6 +43,11 @@ def authenticate(chat):
         elif chat.lastRes == "Ok, can I have an account number please?":
             chat.accountNumber = int(chat.utterance)
             chat.text = ''
+        elif 'deauthenticate' in chat.utterance.lower() or 'logout' in chat.utterance.lower():
+            chat.auth = False
+            chat.accountNumber = 0
+            chat.fullName = "Guest"
+            chat.text = "You have been deauthenticated."
         else:
             print('Not Auth')
             chat.text = ''
