@@ -39,7 +39,7 @@ def accountBal(chat):
             check = chat.utterance.split()
             print(check)
             if item['accountBalance']:
-                bal = item['accountBalance']
+                bal = '$%s' % item['accountBalance']
 
     except:
         bal = 'Bad data'
