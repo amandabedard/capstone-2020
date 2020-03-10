@@ -21,6 +21,7 @@ def checkSession(chat, chatId):
             chat.lastRes = item['lastRes']
             chat.lastUtt = item['lastUtt']
             chat.utterance = item['utterance']
+            chat.ipAddr = item['ipAddr']
             chat.exists = True
         else:
             chat.exists = False
@@ -42,11 +43,12 @@ def updateSession(chat):
                     ':chatText': chat.text,
                     ':lastRes': chat.lastRes,
                     ':lastUtt': chat.lastUtt,
-                    ':utterance': chat.utterance
+                    ':utterance': chat.utterance,
+                    ':ipAddr': chat.ipAddr
             }
             table.update_item(
                 Key=tableKey,
-                UpdateExpression="SET endChat= :endChat, authorized= :authorized, fullName= :fullName, accountNumber= :accountNumber, chatText= :chatText, lastRes= :lastRes, lastUtt= :lastUtt, utterance= :utterance",
+                UpdateExpression="SET ipAddr= :ipAddr, endChat= :endChat, authorized= :authorized, fullName= :fullName, accountNumber= :accountNumber, chatText= :chatText, lastRes= :lastRes, lastUtt= :lastUtt, utterance= :utterance",
                 ExpressionAttributeValues=attributes
             )
             return

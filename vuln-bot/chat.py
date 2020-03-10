@@ -9,6 +9,7 @@ class Chat:
         self.lastRes = '#'
         self.lastUtt = '#'
         self.utterance = ''
+        self.ipAddr = '0.0.0.0'
 
     def __str__(self):
         return str(self.__dict__)

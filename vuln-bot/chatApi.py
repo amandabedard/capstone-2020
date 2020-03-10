@@ -33,6 +33,9 @@ def chat():
         chat = createChatDict(request, chat)
         chat = chatWithBot(chat)
 
+        print(request.remote_addr)
+        chat.ipAddr = request.remote_addr
+
         print(chat)
         updateSession(chat)
 
@@ -41,6 +44,7 @@ def chat():
             "response": chat.text,
             "metadata": str(chat)
         }
+        
         return jsonify(res)
 
     # except:
